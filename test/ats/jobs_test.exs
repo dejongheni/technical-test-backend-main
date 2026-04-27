@@ -21,6 +21,12 @@ defmodule Ats.JobsTest do
       assert Jobs.list_jobs() |> Enum.map(& &1.id) == [job.id]
     end
 
+    test "list_jobs_with_status/1 returns jobs with the given status" do
+      job_published = job_fixture(%{status: "published"})
+      _job_draft = job_fixture(%{status: "draft"})
+      assert Jobs.list_jobs_with_status("published") |> Enum.map(& &1.id) == [job_published.id]
+    end
+
     test "get_job!/1 returns the job with given id" do
       job = job_fixture()
       assert Jobs.get_job!(job.id).id == job.id

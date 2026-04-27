@@ -58,6 +58,20 @@ defmodule Ats.Jobs do
   end
 
   @doc """
+  Returns the list of jobs with a specific status.
+
+  ## Examples
+
+      iex> list_jobs_with_status("published")
+      [%Job{}, ...]
+
+  """
+  def list_jobs_with_status(status) do
+    Repo.all(from j in Job, where: j.status == ^status) |> Repo.preload(:profession)
+  end
+
+
+  @doc """
   Gets a single job.
 
   Raises `Ecto.NoResultsError` if the Job does not exist.

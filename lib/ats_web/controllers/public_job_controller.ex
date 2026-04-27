@@ -4,7 +4,7 @@ defmodule AtsWeb.PublicJobController do
   alias Ats.Jobs
 
   def index(conn, _params) do
-    jobs = Jobs.list_jobs()
+    jobs = Jobs.list_jobs_with_status("published")
     render(conn, :index, jobs: jobs)
   end
 end
