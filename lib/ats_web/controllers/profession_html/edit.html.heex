@@ -1,0 +1,8 @@
+<.header>
+  Edit Profession <%= @profession.id %>
+  <:subtitle>Use this form to manage profession records in your database.</:subtitle>
+</.header>
+
+<.profession_form changeset={@changeset} action={~p"/professions/#{@profession}"} />
+
+<.back navigate={~p"/professions"}>Back to professions</.back>

@@ -1,0 +1,18 @@
+<.header>
+  Candidate <%= @candidate.id %>
+  <:subtitle>This is a candidate record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/candidates/#{@candidate}/edit"}>
+      <.button>Edit candidate</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Full name"><%= @candidate.full_name %></:item>
+  <:item title="Email"><%= @candidate.email %></:item>
+  <:item title="Phone"><%= @candidate.phone %></:item>
+  <:item title="Last known job"><%= @candidate.last_known_job %></:item>
+</.list>
+
+<.back navigate={~p"/candidates"}>Back to candidates</.back>

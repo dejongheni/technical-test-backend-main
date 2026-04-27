@@ -1,0 +1,28 @@
+<.header>
+  Listing Jobs
+  <:actions>
+    <.link href={~p"/jobs/new"}>
+      <.button>New Job</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="jobs" rows={@jobs} row_click={&JS.navigate(~p"/jobs/#{&1}")}>
+  <:col :let={job} label="Title"><%= job.title %></:col>
+  <:col :let={job} label="Profession"><%= Ats.Jobs.profession_name(job) %></:col>
+  <:col :let={job} label="Contract Type"><%= Ats.Jobs.contract_type(job) %></:col>
+  <:col :let={job} label="Work mode"><%= job.work_mode %></:col>
+  <:col :let={job} label="Office"><%= job.office %></:col>
+  <:col :let={job} label="Status"><%= job.status %></:col>
+  <:action :let={job}>
+    <div class="sr-only">
+      <.link navigate={~p"/jobs/#{job}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/jobs/#{job}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={job}>
+    <.link href={~p"/jobs/#{job}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>

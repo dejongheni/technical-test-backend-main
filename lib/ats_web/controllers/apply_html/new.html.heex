@@ -1,0 +1,5 @@
+<.header>
+  You will be applying for the position of <%= @job.title %>
+</.header>
+
+<.apply_form changeset={@changeset} action={~p"/#{@job.id}/applies"} />

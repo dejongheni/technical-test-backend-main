@@ -1,0 +1,16 @@
+<.header>
+  Profession <%= @profession.id %>
+  <:subtitle>This is a profession record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/professions/#{@profession}/edit"}>
+      <.button>Edit profession</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @profession.name %></:item>
+  <:item title="Category name"><%= @profession.category_name %></:item>
+</.list>
+
+<.back navigate={~p"/professions"}>Back to professions</.back>

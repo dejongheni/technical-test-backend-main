@@ -1,0 +1,31 @@
+<.header>
+  <%= @job.title %>
+  <:actions>
+    <.link href={~p"/jobs/#{@job}/edit"}>
+      <.button>Edit job</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Description"><%= @job.description %></:item>
+  <:item title="Office"><%= @job.office %></:item>
+  <:item title="Profession"><%= Ats.Jobs.profession_name(@job) %></:item>
+  <:item title="Contract Type"><%= Ats.Jobs.contract_type(@job) %></:item>
+  <:item title="Work mode"><%= @job.work_mode %></:item>
+  <:item title="Longitude"><%= @job.office %></:item>
+  <:item title="Status"><%= @job.status %></:item>
+</.list>
+
+<%= if length(@job.applicants) > 0 do %>
+  <.table id="applicants" rows={@job.applicants}>
+    <:col :let={applicant} label="Full Name"><%= applicant.candidate.full_name %></:col>
+    <:col :let={applicant} label="Email"><%= applicant.candidate.email %></:col>
+    <:col :let={applicant} label="Phone"><%= applicant.candidate.phone %></:col>
+    <:col :let={applicant} label="Last job"><%= applicant.candidate.last_known_job %></:col>
+    <:col :let={applicant} label="Date"><%= applicant.application_date %></:col>
+    <:col :let={applicant} label="Salary"><%= applicant.salary_expectation %></:col>
+  </.table>
+<% end %>
+
+<.back navigate={~p"/jobs"}>Back to jobs</.back>

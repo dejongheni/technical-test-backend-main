@@ -1,0 +1,26 @@
+<.header>
+  Listing Candidates
+  <:actions>
+    <.link href={~p"/candidates/new"}>
+      <.button>New Candidate</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="candidates" rows={@candidates} row_click={&JS.navigate(~p"/candidates/#{&1}")}>
+  <:col :let={candidate} label="Full name"><%= candidate.full_name %></:col>
+  <:col :let={candidate} label="Email"><%= candidate.email %></:col>
+  <:col :let={candidate} label="Phone"><%= candidate.phone %></:col>
+  <:col :let={candidate} label="Last known job"><%= candidate.last_known_job %></:col>
+  <:action :let={candidate}>
+    <div class="sr-only">
+      <.link navigate={~p"/candidates/#{candidate}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/candidates/#{candidate}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={candidate}>
+    <.link href={~p"/candidates/#{candidate}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>

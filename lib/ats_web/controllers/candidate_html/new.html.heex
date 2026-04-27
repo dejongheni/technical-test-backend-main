@@ -1,0 +1,8 @@
+<.header>
+  New Candidate
+  <:subtitle>Use this form to manage candidate records in your database.</:subtitle>
+</.header>
+
+<.candidate_form changeset={@changeset} action={~p"/candidates"} />
+
+<.back navigate={~p"/candidates"}>Back to candidates</.back>

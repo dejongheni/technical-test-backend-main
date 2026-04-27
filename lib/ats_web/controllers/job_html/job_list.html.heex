@@ -1,0 +1,34 @@
+<.jobs_table rows={@jobs}>
+  <:column :let={job} label="Title">
+    <%= job.title %>
+  </:column>
+  <:column :let={job} label="Contract Type">
+    <%= job.contract_type %>
+  </:column>
+</.jobs_table>
+
+
+
+
+
+<.badge value={"test badge"}/>
+
+<.greet name={"Yannick"} age={42} />
+
+<p> jobs </p>
+
+
+
+<.hif_block>
+  This is the default body called inner_block
+  <:header>
+    This is the header
+  </:header>
+  <:footer>
+    This is the footer
+  </:footer>
+</.hif_block>
+
+<%= for j <- @jobs do %>
+  <p> <%= j.title %> </p>
+<% end %>

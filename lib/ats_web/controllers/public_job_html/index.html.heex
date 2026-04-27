@@ -1,0 +1,14 @@
+<.header>
+  Listing Jobs
+</.header>
+
+<.table id="jobs" rows={@jobs}>
+  <:col :let={job} label="Title"><%= job.title %></:col>
+  <:col :let={job} label="Profession"><%= Ats.Jobs.profession_name(job) %></:col>
+  <:col :let={job} label="Contract Type"><%= Ats.Jobs.contract_type(job) %></:col>
+  <:col :let={job} label="Work mode"><%= job.work_mode %></:col>
+  <:col :let={job} label="Office"><%= job.office %></:col>
+  <:action :let={job}>
+    <.link navigate={~p"/#{job}/applies/new"}>Apply</.link>
+  </:action>
+</.table>
