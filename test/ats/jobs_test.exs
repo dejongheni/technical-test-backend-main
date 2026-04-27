@@ -7,6 +7,7 @@ defmodule Ats.JobsTest do
     alias Ats.Jobs.Job
 
     import Ats.JobsFixtures
+    import Ats.ApplicantsFixtures
 
     @invalid_attrs %{
       contract_type: nil,
@@ -87,6 +88,15 @@ defmodule Ats.JobsTest do
       assert {:ok, %Job{}} = Jobs.delete_job(job)
       assert_raise Ecto.NoResultsError, fn -> Jobs.get_job!(job.id) end
     end
+
+    test "delete_job/1 with applicants deletes the job and the applicants linked to it" do
+      job = job_fixture()
+      applicant = applicant_fixture(%{job_id: job.id})
+      assert {:ok, %Job{}} = Jobs.delete_job(job)
+      assert_raise Ecto.NoResultsError, fn -> Jobs.get_job!(job.id) end
+      assert_raise Ecto.NoResultsError, fn -> Ats.Applicants.get_applicant!(applicant.id) end
+    end
+
 
     test "change_job/1 returns a job changeset" do
       job = job_fixture()
