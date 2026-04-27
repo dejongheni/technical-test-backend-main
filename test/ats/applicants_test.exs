@@ -60,4 +60,47 @@ defmodule Ats.ApplicantsTest do
       assert %Ecto.Changeset{} = Applicants.change_applicant(applicant)
     end
   end
+
+  describe "create_apply/1" do
+    import Ats.JobsFixtures
+
+    test "with valid data creates an application and a candidate" do
+      job = job_fixture()
+      attrs = %{
+        "job_id" => "#{job.id}",
+        "full_name" => "Test candidate",
+        "email" => "test@test.com",
+        "phone" => "1234567890",
+        "last_known_job" => "Developer",
+        "salary_expectation" => "50000"
+      }
+
+      assert {:ok, %{candidate: candidate, applicant: applicant}} = Applicants.create_apply(attrs)
+      assert candidate.email == "test@test.com"
+      assert applicant.job_id == job.id
+    end
+
+    test "duplicate candidate is rejected" do
+      job = job_fixture()
+      attrs = %{
+        "job_id" => "#{job.id}",
+        "full_name" => "Test candidate",
+        "email" => "test@test.com",
+        "phone" => "1234567890",
+        "last_known_job" => "Developer",
+        "salary_expectation" => "50000"
+      }
+
+      assert {:ok, %{candidate: candidate, applicant: applicant}} = Applicants.create_apply(attrs)
+      assert candidate.email == "test@test.com"
+      assert applicant.job_id == job.id
+
+      assert {:error, %Ecto.Changeset{
+        errors: [
+          phone: {"Candidate with this email or phone number has already applied for this job", []},
+          email: {"Candidate with this email or phone number has already applied for this job", []}
+        ]
+      }} = Applicants.create_apply(attrs)
+    end
+  end
 end
