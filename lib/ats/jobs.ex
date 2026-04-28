@@ -85,7 +85,7 @@ defmodule Ats.Jobs do
       ** (Ecto.NoResultsError)
 
   """
-  def get_job!(id), do: Repo.get!(Job, id) |> Repo.preload(applicants: [:candidate])
+  def get_job!(id), do: Repo.get!(Job, id) |> Repo.preload([:user, applicants: [:candidate]])
 
   @doc """
   Creates a job.

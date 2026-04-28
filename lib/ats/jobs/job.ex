@@ -23,6 +23,8 @@ defmodule Ats.Jobs.Job do
     belongs_to :profession, Ats.Professions.Profession
     has_many :applicants, Ats.Applicants.Applicant
 
+    belongs_to :user, Ats.Accounts.User
+
     timestamps()
   end
 
@@ -35,7 +37,8 @@ defmodule Ats.Jobs.Job do
       :office,
       :contract_type,
       :status,
-      :work_mode
+      :work_mode,
+      :user_id
     ])
     |> validate_required([:title, :office, :contract_type])
   end

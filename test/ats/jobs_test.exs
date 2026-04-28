@@ -8,6 +8,7 @@ defmodule Ats.JobsTest do
 
     import Ats.JobsFixtures
     import Ats.ApplicantsFixtures
+    import Ats.AccountsFixtures
 
     @invalid_attrs %{
       contract_type: nil,
@@ -34,13 +35,15 @@ defmodule Ats.JobsTest do
     end
 
     test "create_job/1 with valid data creates a job" do
+      user = user_fixture()
       valid_attrs = %{
         contract_type: "FULL_TIME",
         description: "Elixir dev backend",
         office: "Paris",
         status: "draft",
         title: "Dev Backend",
-        work_mode: "onsite"
+        work_mode: "onsite",
+        user_id: user.id
       }
 
       assert {:ok, %Job{} = job} = Jobs.create_job(valid_attrs)
@@ -50,6 +53,7 @@ defmodule Ats.JobsTest do
       assert job.status == :draft
       assert job.title == "Dev Backend"
       assert job.work_mode == :onsite
+      assert job.user_id == user.id
     end
 
     test "create_job/1 with invalid data returns error changeset" do

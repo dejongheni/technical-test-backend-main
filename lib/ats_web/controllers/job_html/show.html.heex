@@ -15,6 +15,8 @@
   <:item title="Work mode"><%= @job.work_mode %></:item>
   <:item title="Longitude"><%= @job.office %></:item>
   <:item title="Status"><%= @job.status %></:item>
+  <:item title="Owner"><%= if @job.user, do: @job.user.email %></:item>
+
 </.list>
 
 <%= if length(@job.applicants) > 0 do %>

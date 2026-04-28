@@ -20,6 +20,7 @@ defmodule AtsWeb.JobController do
   end
 
   def create(conn, %{"job" => job_params}) do
+    job_params = Map.put(job_params, "user_id", conn.assigns.current_user.id)
     case Jobs.create_job(job_params) do
       {:ok, job} ->
         conn
