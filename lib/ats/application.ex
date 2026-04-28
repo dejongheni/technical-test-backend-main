@@ -17,9 +17,10 @@ defmodule Ats.Application do
       # Start Finch
       {Finch, name: Ats.Finch},
       # Start the Endpoint (http/https)
-      AtsWeb.Endpoint
+      AtsWeb.Endpoint,
       # Start a worker by calling: Ats.Worker.start_link(arg)
-      # {Ats.Worker, arg}
+      # {Ats.Worker, arg},
+      {Task.Supervisor, name: Ats.MailerTaskSupervisor, strategy: :one_for_one}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
