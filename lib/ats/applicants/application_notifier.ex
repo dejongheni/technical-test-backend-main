@@ -3,6 +3,7 @@ defmodule Ats.Applicants.ApplicationNotifier do
   This module provides functions for sending emails to users on application creation.
   """
   import Swoosh.Email
+  import Phoenix.Component
 
   alias Ats.Mailer
 
@@ -11,14 +12,13 @@ defmodule Ats.Applicants.ApplicationNotifier do
     router: AtsWeb.Router,
     statics: AtsWeb.static_paths()
 
-  def deliver(recipient, subject, text_body, html_body) do
+  def deliver(recipient, subject, body) do
     email =
       new()
       |> to(recipient)
       |> from({"Ats", Application.get_env(:ats, :sender_email)})
       |> subject(subject)
-      |> text_body(text_body)
-      |> html_body(html_body)
+      |> html_body(body)
 
     with {:ok, _metadata} <- Mailer.deliver(email) do
       {:ok, email}
@@ -45,36 +45,33 @@ defmodule Ats.Applicants.ApplicationNotifier do
       job = applicant.job
       url = AtsWeb.Endpoint.url() <> ~p"/jobs/#{job.id}"
 
-      text_body = """
-        Hello #{mail_to},
-
-        A new candidate has applied for your job posting "#{job.title}".
-
-        You can view the application by visiting the URL below:
-        #{url}
-        """
-
-      html_body = """
-        <html>
-        <body>
-        <p>Hello #{mail_to},</p>
-
-        <p>A new candidate has applied for your job posting "#{job.title}".</p>
-
-        <p>You can view the application by visiting the URL below:</p>
-        <a href="#{url}">#{url}</a>
-        </body>
-        </html>
-        """
+      body = deliver_notification_email_content(%{mail_to: mail_to, job_title: job.title, url: url})
+        |> Phoenix.HTML.html_escape()
+        |> Phoenix.HTML.safe_to_string()
 
       Task.Supervisor.start_child(
         Ats.MailerTaskSupervisor,
         __MODULE__,
         :deliver,
-        [mail_to, "Application Notification", text_body, html_body],
+        [mail_to, "Application Notification", body],
         restart: :transient,
         max_restarts: 5
       )
     end
+  end
+
+  def deliver_notification_email_content(assigns) do
+    ~H"""
+      <html>
+        <body>
+        <p>Hello <%= @mail_to %>,</p>
+
+        <p>A new candidate has applied for your job posting "<%= @job_title %>".</p>
+
+        <p>You can view the application by visiting the URL below:</p>
+        <a href={@url}><%= @url %></a>
+        </body>
+      </html>
+    """
   end
 end
