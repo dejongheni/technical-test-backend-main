@@ -1,6 +1,9 @@
 defmodule AtsWeb.ApplyControllerTest do
-  use AtsWeb.ConnCase
+  use AtsWeb.ConnCase, async: false
   import Ats.JobsFixtures
+  import Ats.AccountsFixtures
+  import Swoosh.TestAssertions
+
 
   @create_attrs %{
     full_name: "John Doe",
@@ -19,6 +22,13 @@ defmodule AtsWeb.ApplyControllerTest do
 
   setup :register_and_log_in_user
 
+  setup do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Ats.Repo)
+    Ecto.Adapters.SQL.Sandbox.mode(Ats.Repo, {:shared, self()})
+    :ok
+  end
+
+
   describe "new applicant" do
     test "renders form", %{conn: conn} do
       job = job_fixture()
@@ -29,10 +39,18 @@ defmodule AtsWeb.ApplyControllerTest do
 
   describe "create applicant" do
     test "redirects to show when data is valid", %{conn: conn} do
-      job = job_fixture()
+      user = user_fixture()
+      job = job_fixture(user_id: user.id)
       conn = post(conn, ~p"/#{job.id}/applies", apply: @create_attrs)
 
       assert redirected_to(conn) == ~p"/"
+
+      Process.sleep(100)
+
+      assert_email_sent(
+        subject: "Application Notification",
+        to: [{"", user.email}]
+      )
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
