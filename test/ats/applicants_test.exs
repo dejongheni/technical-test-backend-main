@@ -1,7 +1,18 @@
 defmodule Ats.ApplicantsTest do
   use Ats.DataCase
 
+  import Swoosh.TestAssertions
+  import Ats.JobsFixtures
+  import Ats.AccountsFixtures
+  import Ats.ApplicantsFixtures
+
   alias Ats.Applicants
+
+  setup do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Ats.Repo)
+    Ecto.Adapters.SQL.Sandbox.mode(Ats.Repo, {:shared, self()})
+    :ok
+  end
 
   describe "applicants" do
     alias Ats.Applicants.Applicant
@@ -63,9 +74,11 @@ defmodule Ats.ApplicantsTest do
 
   describe "create_apply/1" do
     import Ats.JobsFixtures
+    import Ats.AccountsFixtures
 
     test "with valid data creates an application and a candidate" do
-      job = job_fixture()
+      user = user_fixture()
+      job = job_fixture(user_id: user.id)
       attrs = %{
         "job_id" => "#{job.id}",
         "full_name" => "Test candidate",
@@ -78,10 +91,17 @@ defmodule Ats.ApplicantsTest do
       assert {:ok, %{candidate: candidate, applicant: applicant}} = Applicants.create_apply(attrs)
       assert candidate.email == "test@test.com"
       assert applicant.job_id == job.id
+
+      Process.sleep(100)
+      assert_email_sent(
+        subject: "Application Notification",
+        to: [{"", user.email}]
+      )
     end
 
     test "duplicate candidate is rejected" do
-      job = job_fixture()
+      user = user_fixture()
+      job = job_fixture(user_id: user.id)
       attrs = %{
         "job_id" => "#{job.id}",
         "full_name" => "Test candidate",

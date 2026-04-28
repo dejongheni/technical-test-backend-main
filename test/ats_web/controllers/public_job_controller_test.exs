@@ -1,6 +1,5 @@
 defmodule AtsWeb.PublicJobControllerTest do
   use AtsWeb.ConnCase
-  import Ats.JobsFixtures
 
   describe "index" do
     test "lists all published jobs", %{conn: conn} do

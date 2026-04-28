@@ -11,7 +11,7 @@ defmodule Ats.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"Ats", "contact@example.com"})
+      |> from({"Ats", Application.get_env(:ats, :sender_email)})
       |> subject(subject)
       |> text_body(body)
 

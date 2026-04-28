@@ -122,6 +122,7 @@ defmodule Ats.Applicants do
       |> Ats.Repo.transaction()
       |> case do
         {:ok, %{candidate: candidate, applicant: applicant}} ->
+          Ats.Applicants.ApplicationNotifier.deliver_application_notification(applicant)
           {:ok, %{candidate: candidate, applicant: applicant}}
 
         {:error, _} ->

@@ -29,6 +29,8 @@ config :ats, AtsWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :ats, Ats.Mailer, adapter: Swoosh.Adapters.Local
 
+config :ats, :sender_email, "contact@example.com"
+
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
