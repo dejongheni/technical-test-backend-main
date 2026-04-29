@@ -1,5 +1,8 @@
 # Technical Test for Backend Developer - Application Tracking System
 
+You can find my README [here](README-NicolasDejonghe.md)
+
+___
 Welcome to the Backend Developer Job Application Tracking System! This application, built with Elixir Phoenix, is designed to assist in conducting technical tests for backend developer candidates.
 
 This application is a simplified job board.
